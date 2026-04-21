@@ -1,14 +1,14 @@
 function plot_phasor(t, h_f)
     
     % We put this in a for loop for each pixel, with separate h_f functions
-    [s, g, tau] = phasor_quantities(12.5,t,h_f);
+    [s, g, tau_approx] = phasor_quantities(12.5,t,h_f);
     
     % Plot (only for a single point, should be repurposed)
     figure('Color', 'white');
-    scatter(g, s, 120, tau, 'filled');   % [tau] is explicitly a 1x1 double vector
+    scatter(g, s, 120, tau_approx, 'filled');   % [tau] is explicitly a 1x1 double vector
     colormap(parula);
     cb = colorbar;
-    clim([tau*0.9, tau*1.1]);
+    clim([tau_approx*0.9, tau_approx*1.1]);
     cb.Label.String = '\tau (recovered)';
     cb.Label.FontSize = 12;
     xlabel('g',  'FontSize', 13);
