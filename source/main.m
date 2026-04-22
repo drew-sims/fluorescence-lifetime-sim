@@ -13,7 +13,7 @@ hd = get_detector_irf(t, 2.0, 0.5); % t0 = 2ns, sigma = 0.5ns
 
 f = conv(x, hf, 'same') * sample_period; 
 d = conv(f, hd, 'same');
-[t_n, y_n] = get_sampling(t,d,Ts);
+[y_n, t_n] = get_sampling(t,d,Ts);
 
 figure(1);
 subplot(4,1,1); plot(t, x); title('Excitation x(t)'); ylabel('Amp'); grid on;
