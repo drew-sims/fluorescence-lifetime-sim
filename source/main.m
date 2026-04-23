@@ -13,7 +13,10 @@ t = 0 : sample_period : (t_end - sample_period);
 %% Part A: Time-Domain Signals
 x = get_excitation(t, TL);
 hf = get_fluorescence_irf(t, tau);
-hd = get_detector_irf(t, 2.0, 0.5); % t0 = 2ns, sigma = 0.5ns
+
+t0 = 6;
+sigma = 1;
+hd = get_detector_irf(t, t0, sigma); % t0 = 2ns, sigma = 0.5ns
 
 f = ifft(fft(x) .* fft(hf));
 d = ifft(fft(f) .* fft(hd));
@@ -41,3 +44,12 @@ title('Fluorescence Magnitude Response'); ylabel('|H(f)|'); legend('Theory','FFT
 subplot(2,1,2);
 semilogx(freqs, angle(H_theory), 'k', freqs, angle(H_num), 'r--');
 title('Fluorescence Phase Response'); ylabel('Phase (rad)'); xlabel('Frequency (GHz)'); grid on;
+
+%% Problem 3: Phasor Analysis
+
+i_info = load("FLIMhistogram.mat");
+
+t_limit = (0:97) * (TL/98);   % 1x98, matches 3rd dim of H
+H = i_info.FLIMhistogram;
+max(H)
+plot_phasor(TL, t_limit, H);
