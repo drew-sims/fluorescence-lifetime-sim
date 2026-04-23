@@ -4,15 +4,19 @@ TL = 12.5;     % ns
 Ts = 0.2;      % ns
 t_end = 100;   % ns
 sample_period = Ts/1000;
-t = 0:sample_period:t_end;
+
+% TODO: Weird behaviour that I cannot explain, had to subtract one sample
+% period otherwise it will double count, which makes sense in terms of the
+% periodicity of the FFT, though get_excitement are not acting as I expect.
+t = 0 : sample_period : (t_end - sample_period);
 
 %% Part A: Time-Domain Signals
 x = get_excitation(t, TL);
 hf = get_fluorescence_irf(t, tau);
 hd = get_detector_irf(t, 2.0, 0.5); % t0 = 2ns, sigma = 0.5ns
 
-f = conv(x, hf, 'same') * sample_period; 
-d = conv(f, hd, 'same');
+f = ifft(fft(x) .* fft(hf));
+d = ifft(fft(f) .* fft(hd));
 [y_n, t_n] = get_sampling(t,d,Ts);
 
 figure(1);
