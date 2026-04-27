@@ -21,12 +21,9 @@ function plot_phasor(TL, t, H)
     for k = 1:npix
         h_f = H_flat(k, :);           % 1D decay for this pixel
         [s_all(k), g_all(k), tau_all(k)] = phasor_quantities(TL, t, h_f);
-        if mod(k,100) == 0
+        
+        if k == 100:
             plot(t, h_f);
-            title("Fluorescence Lifetime");
-            ylabel("Bin Counts");
-            xlabel("Time (ns)");
-        end
     end
 
     % Mask low-count pixels (avoids noisy phasors from background)

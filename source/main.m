@@ -4,7 +4,11 @@ TL = 12.5;     % ns
 Ts = 0.2;      % ns
 t_end = 100;   % ns
 sample_period = Ts/1000;
-t = 0:sample_period:t_end;
+
+% TODO: Weird behaviour that I cannot explain, had to subtract one sample
+% period otherwise it will double count, which makes sense in terms of the
+% periodicity of the FFT, though get_excitement are not acting as I expect.
+t = 0 : sample_period : (t_end - sample_period);
 
 %% Part A: Time-Domain Signals
 x = get_excitation(t, TL);
@@ -14,8 +18,8 @@ t0 = 6;
 sigma = 1;
 hd = get_detector_irf(t, t0, sigma); % t0 = 2ns, sigma = 0.5ns
 
-f = conv(x, hf, 'same') * sample_period; 
-d = conv(f, hd, 'same');
+f = ifft(fft(x) .* fft(hf));
+d = ifft(fft(f) .* fft(hd));
 [y_n, t_n] = get_sampling(t,d,Ts);
 
 figure(1);
@@ -41,11 +45,17 @@ subplot(2,1,2);
 semilogx(freqs, angle(H_theory), 'k', freqs, angle(H_num), 'r--');
 title('Fluorescence Phase Response'); ylabel('Phase (rad)'); xlabel('Frequency (GHz)'); grid on;
 
+
 %% Problem 3: Phasor Analysis
 
-i_info = load("FLIMhistogram.mat");
+i_info = load("../input/FLIMhistogram.mat");
 
 t_limit = (0:97) * (TL/98);   % 1x98, matches 3rd dim of H
 H = i_info.FLIMhistogram;
-max(H)
-plot_phasor(TL, t_limit, H);
+
+% mean decay across all pixels, find peak and circshift to align
+mean_decay = squeeze(mean(mean(double(H), 1), 2));  % 98x1
+[~, peak_bin] = max(mean_decay);
+H_aligned = circshift(H, -peak_bin, 3);  % roll peak to bin 1
+
+plot_phasor(TL, t_limit, H_aligned);
