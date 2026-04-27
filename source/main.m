@@ -1,3 +1,8 @@
+% Case Study 2
+
+% Please run the code while you are within the source directory, otherwise
+% the paths will not work.
+
 %% Problem 1
 
 tau = 1.0;      % ns
@@ -90,7 +95,7 @@ f_t = 1 + M*cos(w_L*t_rf - phi);
 g_t = cos(w_g*t_rf);
 y_t = f_t .* g_t;
 
-figure(3);
+figure(4);
 subplot(2,1,1);
 plot(t_rf, x_t);
 title('x(t) = 1 + cos(\omega_L t)');
@@ -105,7 +110,7 @@ xlabel('Time (ns)');
 ylabel('f(t)');
 grid on;
 
-figure(4);
+figure(5);
 subplot(2,1,1);
 plot(t_rf, g_t);
 title('g(t) = cos(\omega_g t)');
@@ -141,7 +146,7 @@ Ymag(1) = abs(Y_adjusted(1));
 
 freq_kHz = freq * 1e6;
 
-figure(5);
+figure(6);
 plot(freq_kHz, Ymag);
 xlim([0 100]);
 title('Magnitude of Y(j\omega)');

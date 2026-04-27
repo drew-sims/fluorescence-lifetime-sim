@@ -16,7 +16,7 @@ function plot_phasor(TL, t, H)
     tau_all     = zeros(npix, 1);
     total_counts = sum(H_flat, 2);     % photon count per pixel
     
-    figure(5);
+    figure();
     % Iterate over all pixels
     for k = 1:npix
         h_f = H_flat(k, :);           % 1D decay for this pixel
@@ -38,7 +38,6 @@ function plot_phasor(TL, t, H)
     tau_plot = tau_all(mask);
 
     % Plot
-    figure(3);
     figure('Color', 'white');
     hold on;
 
